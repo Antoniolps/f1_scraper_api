@@ -1,7 +1,3 @@
-Certainly! Here’s a professional and informative `README.MD` for your F1 API project:
-
----
-
 # 🏎️ F1 API
 
 A Python Flask API to fetch and serve Formula 1 Grand Prix results and schedule data directly from Wikipedia, supporting flexible Grand Prix name mapping and robust scraping for multiple seasons.
