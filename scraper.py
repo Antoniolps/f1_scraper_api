@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from gp_mapper import map_gp_to_official_name
+import re
 
 
 CACHE_SEASONS: dict[int, list[dict]] = {}
@@ -43,11 +44,11 @@ def _scrape_tabela_temporada(year: int):
 
         lines_gp.append(
             {
-                "grand_prix": cols[gp_col_idx].get_text(strip=True) if gp_col_idx is not None else None,
-                "pole": cols[col_map.get("pole position")].get_text(strip=True) if "pole position" in col_map else None,
-                "fastest_lap": cols[col_map.get("fastest lap")].get_text(strip=True) if "fastest lap" in col_map else None,
-                "winner": cols[col_map.get("winning driver")].get_text(strip=True) if "winning driver" in col_map else None,
-                "team": cols[col_map.get("winning constructor")].get_text(strip=True) if "winning constructor" in col_map else None,
+                "grand_prix": clean_value(cols[gp_col_idx].get_text(strip=True)) if gp_col_idx is not None else None,
+                "pole": clean_value(cols[col_map.get("pole position")].get_text(strip=True)) if "pole position" in col_map else None,
+                "fastest_lap": clean_value(cols[col_map.get("fastest lap")].get_text(strip=True)) if "fastest lap" in col_map else None,
+                "winner": clean_value(cols[col_map.get("winning driver")].get_text(strip=True)) if "winning driver" in col_map else None,
+                "team": clean_value(cols[col_map.get("winning constructor")].get_text(strip=True)) if "winning constructor" in col_map else None,
             }
         )
 
@@ -67,3 +68,8 @@ def get_race_results(gp: str, year: int) -> dict | None:
                 return {"erro": f"Resultados não disponíveis para {official_name} {year}."}
             return race
     return None
+
+
+def clean_value(val: str) -> str:
+    # Remove bracketed references like [c], [12], [note 1], etc.
+    return re.sub(r'\[[^\]]*\]', '', val).strip()
