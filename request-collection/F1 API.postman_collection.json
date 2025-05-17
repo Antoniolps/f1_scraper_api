@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "43eb1b98-3857-4f5c-a00d-e2c75681730d",
+		"name": "F1 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24046803"
+	},
+	"item": [
+		{
+			"name": "Load Race",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gp\": \"china\",\r\n  \"year\": 2025\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/race",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"race"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Race Pole Position",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/race/pole",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"race",
+						"pole"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Race Fastest Lap Owner",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/race/fastest-lap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"race",
+						"fastest-lap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get race winner",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/race/winner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"race",
+						"winner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get race constructors winner",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/race/team",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"race",
+						"team"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
