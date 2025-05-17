@@ -1,0 +1,33 @@
+# Bytecode Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Ambiente virtual (ajuste o nome da pasta se necessário)
+venv/
+.env/
+.venv/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Pytest e caches
+.pytest_cache/
+.cache/
+
+# Jupyter (caso use notebooks)
+.ipynb_checkpoints/
+
+# Sistema operacional
+*.swp
