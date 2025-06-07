@@ -5,6 +5,57 @@ import re
 
 
 CACHE_SEASONS: dict[int, list[dict]] = {}
+CACHE_CALENDAR: dict[int, list[dict]] = {}
+
+
+def get_season_calendar(year: int):
+
+    if year in CACHE_CALENDAR:
+        return CACHE_CALENDAR[year]
+
+    url = f"https://en.wikipedia.org/wiki/{year}_Formula_One_World_Championship"
+    result = requests.get(url, timeout=15)
+    result.raise_for_status()
+    soup = BeautifulSoup(result.text, "html.parser")
+
+    table = None
+
+    for tbl in soup.find_all("table", class_=lambda c: c and "wikitable" in c):
+        header_texts = [th.get_text(strip=True).lower() for th in tbl.find_all("th")]
+        if "round" in header_texts and "grand prix" in header_texts and "circuit" in header_texts and "race date" in header_texts:
+            table = tbl
+            break
+
+    if not table:
+        raise ValueError("Tabela de calendário não encontrada para o ano informado.")
+
+    header_row = table.find("tr")
+    header_texts = [th.get_text(strip=True).lower() for th in header_row.find_all("th")]
+
+    col_map = {name: idx for idx, name in enumerate(header_texts)}
+
+    lines_gp = []
+    for row in table.find_all("tr")[1:]:  # Ignora o cabeçalho
+        cols = row.find_all(["td", "th"])
+        if len(cols) < len(col_map):
+            continue
+        
+        round_col_idx = next((idx for name, idx in col_map.items() if "round" in name), None)
+        gp_col_idx = next((idx for name, idx in col_map.items() if "grand prix" in name), None)
+        circuit_col_idx = next((idx for name, idx in col_map.items() if "circuit" in name), None)
+        date_col_idx = next((idx for name, idx in col_map.items() if "race date" in name), None)
+
+        lines_gp.append(
+            {
+                "round": clean_value(cols[round_col_idx].get_text(strip=True)) if round_col_idx is not None else None,
+                "grand_prix": clean_value(cols[gp_col_idx].get_text(strip=True)) if gp_col_idx is not None else None,
+                "circuit": clean_value(cols[circuit_col_idx].get_text(strip=True)) if circuit_col_idx is not None else None,
+                "date": clean_value(cols[date_col_idx].get_text(strip=True)) if date_col_idx is not None else None,
+            }
+        )
+
+    CACHE_CALENDAR[year] = lines_gp
+    return lines_gp
 
 
 def _scrape_tabela_temporada(year: int):
@@ -74,5 +125,4 @@ def get_race_results(gp: str, year: int) -> dict | None:
 
 
 def clean_value(val: str) -> str:
-    # Remove bracketed references like [c], [12], [note 1], etc.
     return re.sub(r'\[[^\]]*\]', '', val).strip()

@@ -125,6 +125,14 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get Race Calendar",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }

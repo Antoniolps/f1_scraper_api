@@ -1,9 +1,23 @@
 from flask import Flask, request, jsonify
-from scraper import get_race_results
+from scraper import get_race_results, get_season_calendar
 
 app = Flask(__name__)
 
 LAST_RACE: dict | None = None
+
+
+@app.route("/calendar/<int:year>", methods=["GET"])
+def calendar(year: int):
+    if not year:
+        return jsonify({"erro": "Parametro 'year' é obrigatório."}), 400
+
+    try:
+        year = int(year)
+    except ValueError:
+        return jsonify({"erro": "Year precisa ser inteiro."}), 400
+
+    calendar = get_season_calendar(year)
+    return jsonify(calendar)
 
 
 @app.route("/race", methods=["POST"])
